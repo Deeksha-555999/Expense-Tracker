@@ -7,7 +7,7 @@ function Transaction({ user, setUserData }) {
   const [history, setHistory] = useState([]);
   const [error, setError] = useState("");
 
-  // ✅ 1. HISTORY LOAD KARNE KA FUNCTION (जो पहले गायब था)
+  // ✅ 1. HISTORY LOAD KARNE KA FUNCTION 
   const loadHistory = async () => {
     if (!user || !user._id) return;
     try {
@@ -110,7 +110,7 @@ function Transaction({ user, setUserData }) {
               }}
             >
               <div>
-                {/* ✅ Date display */}
+               
                 <span style={{ fontSize: "0.85em", color: "#666", display: "block" }}>
                   {formatDate(t.createdAt || t.date)}
                 </span>

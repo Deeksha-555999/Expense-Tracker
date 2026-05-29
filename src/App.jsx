@@ -26,18 +26,17 @@ function App() {
           Authorization: `Bearer ${token}`,
         },
       });
-  // setUserData(res.data.updatedUser)
+      // setUserData(res.data.updatedUser)
       setUserData(res.data);
     } catch {
       localStorage.removeItem("token");
       setUserData(null);
-    
     }
   };
 
   const handleLogout = () => {
     localStorage.removeItem("token");
-  // setUserData(res.data.updatedUser)
+    // setUserData(res.data.updatedUser)
     setUserData(null);
   };
 
@@ -59,7 +58,7 @@ function App() {
 
   return (
     <div className="container">
-      <h1>Saving Tracker</h1>
+      <h1>Expense-Tracker</h1>
 
       {userData ? (
         <div className="card">
@@ -74,6 +73,8 @@ function App() {
       )}
 
       <Transaction user={userData} setUserData={setUserData} />
+  
+
     </div>
   );
 }
