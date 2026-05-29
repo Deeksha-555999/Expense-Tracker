@@ -38,7 +38,7 @@ router.post("/", async (req, res) => {
       userId: user._id,
       amount,
       type,
-      savings: user.saving, 
+      savings: user.saving,
     });
 
     res.json({
@@ -46,7 +46,6 @@ router.post("/", async (req, res) => {
       transaction,
       updatedUser: user,
     });
-
   } catch (err) {
     console.log(err);
     res.status(500).json({ error: err.message });

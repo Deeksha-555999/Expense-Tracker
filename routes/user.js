@@ -9,7 +9,7 @@ const router = express.Router();
 router.post("/login", async (req, res) => {
   console.log("BODY:", req.body);
 
-  const { username, password  } = req.body;
+  const { username, password } = req.body;
 
   console.log("USERNAME:", username);
 
@@ -35,11 +35,10 @@ router.post("/login", async (req, res) => {
 
   const token = jwt.sign({ id: user._id }, "secretKey");
 
-  res.json({ token});
+  res.json({ token });
 });
 
-
-// get user data 
+// get user data
 
 router.get("/data", async (req, res) => {
   const token = req.headers.authorization?.split(" ")[1];

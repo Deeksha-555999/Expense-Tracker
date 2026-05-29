@@ -14,6 +14,7 @@ const userSchema = new mongoose.Schema({
   saving: {
     type: Number,
     default: 0,
+  
   },
 });
 
