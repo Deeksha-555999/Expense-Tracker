@@ -110,7 +110,6 @@ function Transaction({ user, setUserData }) {
               }}
             >
               <div>
-               
                 <span style={{ fontSize: "0.85em", color: "#666", display: "block" }}>
                   {formatDate(t.createdAt || t.date)}
                 </span>
