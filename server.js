@@ -3,15 +3,7 @@ import userRouter from "./routes/user.js";
 import transactionRouter from "./routes/transaction.js";
 const app = express();
 import cors from "cors";
-import mongoose from "mongoose";
-
-const MONGO_URI =
-  "mongodb+srv://deeksha:deeksha1234@deeksha.l1epqsn.mongodb.net/expense-tracker?appName=deeksha";
-
-mongoose
-  .connect(MONGO_URI)
-  .then(() => console.log("MongoDB connected"))
-  .catch((err) => console.error("MongoDB connection error:", err));
+import "./db.js";
 
 app.use(
   cors({

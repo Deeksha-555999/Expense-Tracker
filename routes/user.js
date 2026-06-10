@@ -1,5 +1,5 @@
 import express from "express";
-import User from "../models/User.js";
+import User from "../models/user.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
@@ -7,25 +7,17 @@ const router = express.Router();
 
 //login route
 router.post("/login", async (req, res) => {
-  console.log("BODY:", req.body);
-
   const { username, password } = req.body;
 
-  console.log("USERNAME:", username);
+  const user = User.findOneByUsername(username);
 
-  const user = await User.findOne({ username });
-
-  console.log("USER:", user);
-
-  // if (!user) {
-  //   return res.status(400).json({
-  //     message: "User not found",
-  //   });
-  // }
+  if (!user) {
+    return res.status(400).json({
+      message: "User not found",
+    });
+  }
 
   const isMatch = await bcrypt.compare(password, user.password);
-
-  console.log("PASSWORD MATCH:", isMatch);
 
   if (!isMatch) {
     return res.status(400).json({
@@ -33,7 +25,7 @@ router.post("/login", async (req, res) => {
     });
   }
 
-  const token = jwt.sign({ id: user._id }, "secretKey");
+  const token = jwt.sign({ id: user.id }, "secretKey");
 
   res.json({ token });
 });
@@ -46,8 +38,13 @@ router.get("/data", async (req, res) => {
 
   try {
     const decoded = jwt.verify(token, "secretKey");
-    const user = await User.findById(decoded.id);
-    res.json({ username: user.username, saving: user.saving, _id: user._id });
+    const user = User.findById(decoded.id);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.json({ username: user.username, saving: user.saving, _id: user.id });
   } catch (err) {
     res.status(401).json({ message: "Invalid token" });
   }
@@ -56,11 +53,15 @@ router.get("/data", async (req, res) => {
 //create user
 router.post("/", async (req, res) => {
   try {
-    console.log("Signup body:", req.body);
+    const existingUser = User.findOneByUsername(req.body.username);
+
+    if (existingUser) {
+      return res.status(400).json({ message: "Username already exists" });
+    }
 
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
 
-    const user = await User.create({
+    const user = User.create({
       username: req.body.username,
       password: hashedPassword,
       saving: req.body.saving || 0,
@@ -68,8 +69,6 @@ router.post("/", async (req, res) => {
 
     res.json(user);
   } catch (err) {
-    console.log("SIGNUP ERROR:", err);
-
     res.status(500).json({
       message: err.message,
     });
@@ -78,32 +77,49 @@ router.post("/", async (req, res) => {
 
 // Get all users
 router.get("/", async (req, res) => {
-  const user = await User.find();
-  res.json(user);
+  const users = User.findAll();
+  res.json(users);
 });
 
 // Add money
 router.put("/add/:id", async (req, res) => {
-  let user = await User.findById(req.params.id);
-  user.saving += req.body.amount;
-  await user.save();
-  res.json(user);
+  const user = User.findById(req.params.id);
+
+  if (!user) {
+    return res.status(404).json({ message: "User not found" });
+  }
+
+  const updatedUser = User.updateSaving(
+    req.params.id,
+    Number(user.saving) + Number(req.body.amount),
+  );
+
+  res.json(updatedUser);
 });
 
 // Use money
 router.put("/use/:id", async (req, res) => {
-  let user = await User.findById(req.params.id);
-  if (user.saving < req.body.amount) {
+  const user = User.findById(req.params.id);
+
+  if (!user) {
+    return res.status(404).json({ message: "User not found" });
+  }
+
+  if (Number(user.saving) < Number(req.body.amount)) {
     return res.json({ message: "Insufficient balance" });
   }
-  user.saving -= req.body.amount;
-  await user.save();
-  res.json(user);
+
+  const updatedUser = User.updateSaving(
+    req.params.id,
+    Number(user.saving) - Number(req.body.amount),
+  );
+
+  res.json(updatedUser);
 });
 
 // Delete user
 router.delete("/:id", async (req, res) => {
-  await User.findByIdAndDelete(req.params.id);
+  User.deleteById(req.params.id);
   res.json({ message: "deleted" });
 });
 
