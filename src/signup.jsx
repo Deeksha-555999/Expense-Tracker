@@ -13,9 +13,9 @@ function Signup() {
         password,
         saving,
       });
+
       alert("User created successfully");
       console.log(res.data);
-
       setUsername("");
       setPassword("");
       setSaving(0);

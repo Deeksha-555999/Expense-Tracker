@@ -7,11 +7,13 @@ function Transaction({ user, setUserData }) {
   const [history, setHistory] = useState([]);
   const [error, setError] = useState("");
 
-  // ✅ 1. HISTORY LOAD KARNE KA FUNCTION 
+  // ✅ 1. HISTORY LOAD KARNE KA FUNCTION
   const loadHistory = async () => {
     if (!user || !user._id) return;
     try {
-      const res = await axios.get(`http://localhost:3000/api/transactions/${user._id}`);
+      const res = await axios.get(
+        `http://localhost:3000/api/transactions/${user._id}`,
+      );
       setHistory(res.data);
     } catch (err) {
       console.error("History fetch error:", err);
@@ -29,7 +31,7 @@ function Transaction({ user, setUserData }) {
     return date.toLocaleDateString("en-IN", {
       day: "numeric",
       month: "short",
-      year: "numeric"
+      year: "numeric",
     });
   };
 
@@ -64,8 +66,8 @@ function Transaction({ user, setUserData }) {
       console.log(err.response?.data);
       setError(
         err.response?.data?.message ||
-        err.response?.data?.error ||
-        "Something went wrong"
+          err.response?.data?.error ||
+          "Something went wrong",
       );
     }
   };
@@ -96,7 +98,9 @@ function Transaction({ user, setUserData }) {
 
       <div style={{ maxWidth: "400px", margin: "0 auto", textAlign: "left" }}>
         {history.length === 0 ? (
-          <p style={{ textAlign: "center", color: "#888" }}>No transactions yet</p>
+          <p style={{ textAlign: "center", color: "#888" }}>
+            No transactions yet
+          </p>
         ) : (
           history.map((t) => (
             <div
@@ -106,22 +110,38 @@ function Transaction({ user, setUserData }) {
                 padding: "10px 5px",
                 display: "flex",
                 justifyContent: "space-between",
-                alignItems: "center"
+                alignItems: "center",
               }}
             >
               <div>
-                <span style={{ fontSize: "0.85em", color: "#666", display: "block" }}>
+                <span
+                  style={{
+                    fontSize: "0.85em",
+                    color: "#666",
+                    display: "block",
+                  }}
+                >
                   {formatDate(t.createdAt || t.date)}
                 </span>
-                <span style={{ fontWeight: "bold", textTransform: "uppercase" }}>
+                <span
+                  style={{ fontWeight: "bold", textTransform: "uppercase" }}
+                >
                   {t.type === "save" ? "🟢 Added" : "🔴 Used"}
                 </span>
               </div>
+
               <div style={{ textAlign: "right" }}>
-                <span style={{ fontWeight: "bold", color: t.type === "save" ? "green" : "red" }}>
+                <span
+                  style={{
+                    fontWeight: "bold",
+                    color: t.type === "save" ? "green" : "red",
+                  }}
+                >
                   {t.type === "save" ? "+" : "-"} ₹{t.amount}
                 </span>
-                <span style={{ display: "block", fontSize: "0.8em", color: "#777" }}>
+                <span
+                  style={{ display: "block", fontSize: "0.8em", color: "#777" }}
+                >
                   Balance: ₹{t.savings}
                 </span>
               </div>

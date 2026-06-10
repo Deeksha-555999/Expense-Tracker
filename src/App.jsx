@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import "./App.css";
 import axios from "axios";
-
 import Login from "./Login";
 import Signup from "./Signup";
 import Transaction from "./Transaction";
@@ -73,8 +72,6 @@ function App() {
       )}
 
       <Transaction user={userData} setUserData={setUserData} />
-  
-
     </div>
   );
 }

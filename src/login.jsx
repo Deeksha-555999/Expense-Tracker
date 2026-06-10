@@ -13,17 +13,16 @@ function Login() {
       });
 
       localStorage.setItem("token", res.data.token);
-
       window.location.reload();
     } catch (err) {
       console.log(err);
-
       //alert(err.response?.data?.message);
     }
   };
 
   return (
     <div>
+
       <h2>Login Page</h2>
       <input
         placeholder="username"
