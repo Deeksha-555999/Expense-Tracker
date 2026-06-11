@@ -26,7 +26,6 @@ router.post("/login", async (req, res) => {
   }
 
   const token = jwt.sign({ id: user.id }, "secretKey");
-
   res.json({ token });
 });
 
@@ -93,7 +92,6 @@ router.put("/add/:id", async (req, res) => {
     req.params.id,
     Number(user.saving) + Number(req.body.amount),
   );
-
   res.json(updatedUser);
 });
 
@@ -113,7 +111,6 @@ router.put("/use/:id", async (req, res) => {
     req.params.id,
     Number(user.saving) - Number(req.body.amount),
   );
-
   res.json(updatedUser);
 });
 

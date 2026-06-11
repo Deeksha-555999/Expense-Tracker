@@ -31,6 +31,7 @@ router.post("/", async (req, res) => {
         user.saving = 0;
       }
     }
+   // Update user's savings before creating transaction to ensure accurate savings in transaction record
 
     const updatedUser = User.updateSaving(user.id, user.saving);
 
@@ -55,7 +56,6 @@ router.post("/", async (req, res) => {
 router.get("/:userId", async (req, res) => {
   try {
     const data = Transaction.findByUserId(req.params.userId);
-
     res.json(data);
   } catch (err) {
     res.status(500).json({ error: err.message });
