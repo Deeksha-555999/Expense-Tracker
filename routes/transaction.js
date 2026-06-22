@@ -31,7 +31,7 @@ router.post("/", async (req, res) => {
         user.saving = 0;
       }
     }
-   // Update user's savings before creating transaction to ensure accurate savings in transaction record
+    // Update user's savings before creating transaction to ensure accurate savings in transaction record
 
     const updatedUser = User.updateSaving(user.id, user.saving);
 
